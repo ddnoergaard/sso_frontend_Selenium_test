@@ -64,7 +64,7 @@ namespace SeleniumFrontEndTest
         
             try
             {
-                wait.Until(d => d.FindElements(By.ClassName("table-row")).Count == 3);
+                wait.Until(d => d.FindElements(By.ClassName("table-row")).Count == 4);
             }
             catch (WebDriverTimeoutException)
             {
