@@ -57,16 +57,21 @@ namespace SeleniumFrontEndTest
             string genreName = "pop";
             _driver.Navigate().GoToUrl(URL);
             wait.Until(d => _driver.FindElement(By.ClassName("tr-th")).Displayed);
+        
             IWebElement searchField = _driver.FindElement(By.Id("genre-search-bar"));
             searchField.SendKeys(genreName);
-            IWebElement searchButton = _driver.FindElement(By.Id("search-button"));
-            searchButton.Click();
-            wait.Until(d => d.FindElements(By.ClassName("table-row")).Count() == 3);
-            IEnumerable<IWebElement> searchResult = _driver.FindElements(By.ClassName("table-row"));
-
-            int count = searchResult.Count();
-
-            Assert.Equal(3, count);
+            _driver.FindElement(By.Id("search-button")).Click();
+        
+            try
+            {
+                wait.Until(d => d.FindElements(By.ClassName("table-row")).Count == 3);
+            }
+            catch (WebDriverTimeoutException)
+            {
+                int actual = _driver.FindElements(By.ClassName("table-row")).Count;
+                ((ITakesScreenshot)_driver).GetScreenshot().SaveAsFile("genre-fail.png");
+                Assert.Fail($"Expected 3 rows, found {actual}");
+            }
         }
 
         //Search by publication year and verify only records from that year appear.
