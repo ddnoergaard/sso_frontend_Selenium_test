@@ -8,7 +8,7 @@ namespace SeleniumFrontEndTest
     {
         private string DriverDirectory = "C:\\webdrivers";
         private static IWebDriver _driver;
-        private const string URL = "http://localhost:5173/";
+        private const string URL = "https://frontend-ten-liart-ijufbzpsx4.vercel.app";
         private WebDriverWait wait;
         public UserStory2()
         {
