@@ -6,15 +6,28 @@ namespace SeleniumFrontEndTest
 {
     public class UserStory2 : IDisposable
     {
-        private string DriverDirectory = "C:\\webdrivers";
-        private static IWebDriver _driver;
-        private const string URL = "https://frontend-ten-liart-ijufbzpsx4.vercel.app";
-        private WebDriverWait wait;
-        public UserStory2()
-        {
-            _driver = new ChromeDriver(DriverDirectory);
-            wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(2));
-        }
+        // Local way (visible browser, driver from C:\webdrivers):
+    // private string DriverDirectory = "C:\\webdrivers";
+
+    private IWebDriver _driver;
+    private readonly WebDriverWait wait;
+    private const string URL = "https://frontend-ten-liart-ijufbzpsx4.vercel.app";
+
+    public UserStory2()
+    {
+        // Local way:
+        // _driver = new ChromeDriver(DriverDirectory);
+
+        // GitHub Actions way (headless, driver found by Selenium Manager):
+        var options = new ChromeOptions();
+        options.AddArgument("--headless=new");
+        options.AddArgument("--no-sandbox");
+        options.AddArgument("--disable-dev-shm-usage");
+        options.AddArgument("--window-size=1920,1080");
+        _driver = new ChromeDriver(options);
+
+        wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
+    }
 
         //Type a known title (e.g. “Billie Jean”) and verify the matching record appears in the list.
         [Fact]
@@ -61,6 +74,7 @@ namespace SeleniumFrontEndTest
 
         public void Dispose()
         {
+            _driver.Quit();
             _driver.Dispose();
         }
     }
